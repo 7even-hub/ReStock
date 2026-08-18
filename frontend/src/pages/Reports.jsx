@@ -2,6 +2,13 @@ import PageHeading from "../components/PageHeading";
 import MetricCard from "../components/MetricCard";
 import { formatMoney } from "../utils/formatters";
 
+const icons = {
+  revenue: "mdi:cash-plus",
+  grossProfit: "mdi:trending-up",
+  expenses: "mdi:cash-minus",
+  netProfit: "mdi:cash-check",
+};
+
 // eslint-disable-next-line no-unused-vars
 const money = new Intl.NumberFormat("en-NG", {
   style: "currency",
@@ -31,26 +38,26 @@ export default function Reports({ dashboard, sales, expenses, inventory }) {
       />
       <div className="metric-grid">
         <MetricCard
-          icon="chart"
+          icon={icons.revenue}
           label="Revenue"
           value={formatMoney(Number(revenue || 0))}
           note="Recorded sales"
         />
         <MetricCard
-          icon="arrowUp"
+          icon={icons.grossProfit}
           label="Gross profit"
           value={formatMoney(Number(profit || 0))}
           note="Before expenses"
           positive
         />
         <MetricCard
-          icon="minus"
+          icon={icons.expenses}
           label="Expenses"
           value={formatMoney(Number(expenseTotal || 0))}
           note="Recorded expenses"
         />
         <MetricCard
-          icon="chart"
+          icon={icons.netProfit}
           label="Net profit"
           value={formatMoney(Number(net || 0))}
           note="Profit after expenses"

@@ -1,6 +1,11 @@
 import PageHeading from "../components/PageHeading";
 import MetricCard from "../components/MetricCard";
-import {formatMoney} from "../utils/formatters";
+import { formatMoney } from "../utils/formatters";
+
+const icons = {
+  totalRevenue: "mdi:cash-multiple",
+  totalProfit: "mdi:trending-up",
+};
 
 // eslint-disable-next-line no-unused-vars
 const money = new Intl.NumberFormat("en-NG", {
@@ -36,13 +41,13 @@ export default function Sales({ sales, onRecordSale }) {
       />
       <div className="metric-grid compact">
         <MetricCard
-          icon="chart"
+          icon={icons.totalRevenue}
           label="Total revenue"
           value={formatMoney(Number(revenue || 0))}
           note={`${sales.length} transactions`}
         />
         <MetricCard
-          icon="arrowUp"
+          icon={icons.totalProfit}
           label="Total profit"
           value={formatMoney(Number(profit || 0))}
           note="Gross profit"

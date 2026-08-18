@@ -39,6 +39,7 @@ export default function Dashboard({
   onLogout,
 }) {
   const [modal, setModal] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const firstName = user?.username?.split(" ")[0] || "there";
   const unresolved = alerts.filter((alert) => !alert.resolved);
 
@@ -79,7 +80,21 @@ export default function Dashboard({
 
   return (
     <main className="app-shell">
-      <Sidebar page={page} onNavigate={onNavigate} onLogout={onLogout} />
+      <button
+        className="mobile-menu-button"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Open menu"
+      >
+        <Icon name={sidebarOpen ? "close" : "menu"} size={24} />
+      </button>
+
+      <Sidebar
+        page={page}
+        onNavigate={onNavigate}
+        onLogout={onLogout}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
       <section className="dashboard">
         <header className="dashboard-header">
           <div>
@@ -234,6 +249,4 @@ export default function Dashboard({
       </section>
     </main>
   );
-  
 }
-
