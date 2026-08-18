@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import AuthPage from "./components/AuthPage";
+import ShopSetup from "./pages/ShopSetup";
 import Dashboard from "./components/Dashboard";
 import {
   authApi,
@@ -365,6 +366,21 @@ function App() {
       setBusy(false);
     }
   };
+
+  if (user && !user.onboardingComplete) {
+    return (
+      <ShopSetup
+        user={user}
+        onComplete={(updatedUser) => {
+          localStorage.setItem("stocksplit-user", JSON.stringify(updatedUser));
+
+          setUser(updatedUser);
+          setPage("overview");
+          setScreen("dashboard");
+        }}
+      />
+    );
+  }
 
   if (screen === "dashboard" && data)
     return (

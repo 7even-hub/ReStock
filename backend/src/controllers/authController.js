@@ -4,18 +4,12 @@ const User = require("../models/user");
 
 const registerUser = async (req, res) => {
   try {
-    const {
-      username,
-      email,
-      password,
-      shopName,
-      phoneNumber,
-    } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!username || !email || !password || !shopName || !phoneNumber) {
+    if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "Username, email and password are required",
       });
     }
 
@@ -34,19 +28,32 @@ const registerUser = async (req, res) => {
       username,
       email,
       passwordHash,
-      shopName,
-      phoneNumber,
     });
+
+    const token = jwt.sign(
+      {
+        userId: user._id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     return res.status(201).json({
       success: true,
       message: "Account created successfully",
+      token,
       user: {
         id: user._id,
         username: user.username,
         email: user.email,
         shopName: user.shopName,
         phoneNumber: user.phoneNumber,
+        businessType: user.businessType,
+        location: user.location,
+        preferredUnit: user.preferredUnit,
+        onboardingComplete: user.onboardingComplete,
       },
     });
   } catch (error) {
@@ -63,7 +70,6 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. Check fields
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -71,7 +77,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // 2. Find user and explicitly include passwordHash
     const user = await User.findOne({ email }).select("+passwordHash");
 
     if (!user) {
@@ -81,7 +86,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // 3. Compare password
     const passwordMatch = await bcrypt.compare(
       password,
       user.passwordHash
@@ -94,7 +98,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // 4. Create JWT
     const token = jwt.sign(
       {
         userId: user._id,
@@ -105,7 +108,6 @@ const loginUser = async (req, res) => {
       }
     );
 
-    // 5. Send response
     return res.status(200).json({
       success: true,
       message: "Login successful",
@@ -116,6 +118,10 @@ const loginUser = async (req, res) => {
         email: user.email,
         shopName: user.shopName,
         phoneNumber: user.phoneNumber,
+        businessType: user.businessType,
+        location: user.location,
+        preferredUnit: user.preferredUnit,
+        onboardingComplete: user.onboardingComplete,
       },
     });
   } catch (error) {
@@ -128,7 +134,74 @@ const loginUser = async (req, res) => {
   }
 };
 
+const setupShop = async (req, res) => {
+  try {
+    const {
+      shopName,
+      phoneNumber,
+      businessType,
+      location,
+      preferredUnit,
+    } = req.body;
+
+    if (
+      !shopName ||
+      !phoneNumber ||
+      !businessType ||
+      !location ||
+      !preferredUnit
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "All shop details are required",
+      });
+    }
+
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.shopName = shopName;
+    user.phoneNumber = phoneNumber;
+    user.businessType = businessType;
+    user.location = location;
+    user.preferredUnit = preferredUnit;
+    user.onboardingComplete = true;
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Shop setup completed successfully",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        shopName: user.shopName,
+        phoneNumber: user.phoneNumber,
+        businessType: user.businessType,
+        location: user.location,
+        preferredUnit: user.preferredUnit,
+        onboardingComplete: user.onboardingComplete,
+      },
+    });
+  } catch (error) {
+    console.error("Shop setup error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while setting up your shop",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  setupShop,
 };

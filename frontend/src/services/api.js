@@ -12,6 +12,7 @@ const authorized = (token) => ({ headers: { Authorization: `Bearer ${token}` } }
 export const authApi = {
   register: (details) => request('/auth/register', { method: 'POST', body: JSON.stringify(details) }),
   login: (details) => request('/auth/login', { method: 'POST', body: JSON.stringify(details) }),
+  setupShop: (token, details) => request("/auth/setup-shop", { method: "PUT", body: JSON.stringify(details), ...authorized(token), }),
 }
 
 export const dashboardApi = { get: (token) => request('/dashboard', authorized(token)) }

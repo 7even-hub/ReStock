@@ -26,14 +26,37 @@ const userSchema = new mongoose.Schema(
 
         shopName: {
             type: String,
-            required: true,
             trim: true,
+            default: "",
         },
 
         phoneNumber: {
             type: String,
-            required: true,
             trim: true,
+            default: "",
+        },
+
+        businessType: {
+            type: String,
+            trim: true,
+            default: "",
+        },
+
+        location: {
+            type: String,
+            trim: true,
+            default: "",
+        },
+
+        preferredUnit: {
+            type: String,
+            enum: ["kg", "litres", "pieces", "mixed", ""],
+            default: "",
+        },
+
+        onboardingComplete: {
+            type: Boolean,
+            default: false,
         },
     },
     {
