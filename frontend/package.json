@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/7even-hub/ReStock#readme",
+  "homepage": "https://7even-hub.github.io/ReStock/",
   "bugs": {
     "url": "https://github.com/7even-hub/ReStock/issues"
   },
@@ -19,7 +19,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",
@@ -34,6 +36,7 @@
     "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
+    "gh-pages": "^6.3.0",
     "globals": "^17.7.0",
     "sass": "^1.102.0",
     "vite": "^8.2.0"
