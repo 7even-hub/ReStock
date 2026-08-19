@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import AuthPage from "./components/AuthPage";
 import ShopSetup from "./pages/ShopSetup";
@@ -197,6 +198,8 @@ const demoSales = {
 };
 
 function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const savedToken = localStorage.getItem("stocksplit-token");
   const savedUser = JSON.parse(
     localStorage.getItem("stocksplit-user") || "null",
@@ -214,7 +217,29 @@ function App() {
   const [batches, setBatches] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [alerts, setAlerts] = useState([]);
-  const [page, setPage] = useState("overview");
+  const pageMap = {
+    "/dashboard": "overview",
+    "/inventory": "inventory",
+    "/sales": "sales",
+    "/repackaging": "repack",
+    "/reports": "reports",
+    "/settings": "settings",
+  };
+
+  const page = pageMap[location.pathname] || "overview";
+
+  const handleNavigate = (target) => {
+    const routes = {
+      overview: "/dashboard",
+      inventory: "/inventory",
+      sales: "/sales",
+      repack: "/repackaging",
+      reports: "/reports",
+      settings: "/settings",
+    };
+
+    navigate(routes[target] || "/dashboard");
+  };
   const [isDemo, setIsDemo] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -282,6 +307,12 @@ function App() {
     initializeApp();
   }, [loadData]);
 
+  useEffect(() => {
+  if (location.pathname === "/" && user) {
+    navigate("/dashboard", { replace: true });
+  }
+}, [location.pathname, user, navigate]);
+
   const login = async (details) => {
     setBusy(true);
     setError("");
@@ -294,7 +325,7 @@ function App() {
 
       setUser(result.user);
       setIsDemo(false);
-      setPage("overview");
+      handleNavigate("overview");
 
       await loadData();
 
@@ -335,7 +366,7 @@ function App() {
         resolved: false,
       },
     ]);
-    setPage("overview");
+    handleNavigate("overview");
     setIsDemo(true);
     setError("");
     setScreen("dashboard");
@@ -380,7 +411,7 @@ function App() {
     setBatches([]);
     setExpenses([]);
     setAlerts([]);
-    setPage("overview");
+    handleNavigate("overview");
     setIsDemo(false);
     setMode("login");
     setError("");
@@ -406,7 +437,7 @@ function App() {
           localStorage.setItem("stocksplit-user", JSON.stringify(updatedUser));
 
           setUser(updatedUser);
-          setPage("overview");
+          handleNavigate("overview");
           setScreen("dashboard");
         }}
       />
@@ -446,7 +477,7 @@ function App() {
         isDemo={isDemo}
         busy={busy}
         error={error}
-        onNavigate={setPage}
+        onNavigate={handleNavigate}
         onRefresh={refresh}
         onCreateProduct={createProduct}
         onCreatePurchase={createPurchase}
