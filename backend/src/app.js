@@ -14,8 +14,6 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const alertRoutes = require("./routes/alertRoutes");
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://7even-hub.github.io",
   "https://restock-6d2d.onrender.com"
 ];
 
