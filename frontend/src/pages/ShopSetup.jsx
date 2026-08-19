@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { authApi } from "../services/api";
 
+
 export default function ShopSetup({ onComplete }) {
   const [form, setForm] = useState({
     shopName: "",

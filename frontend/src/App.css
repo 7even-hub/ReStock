@@ -1422,6 +1422,66 @@ button {
     }
 }
 
+.app-loading {
+    align-items: center;
+    background: #f5f7fb;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.app-loading-card {
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(16, 44, 112, .08);
+    display: flex;
+    flex-direction: column;
+    padding: 38px 45px;
+    text-align: center;
+}
+
+.loading-logo {
+    color: #18357f;
+    font-size: 1.7rem;
+    font-weight: 850;
+    letter-spacing: -.06em;
+    margin-bottom: 25px;
+}
+
+.loading-logo span {
+    color: #e8ad26;
+}
+
+.loading-spinner {
+    border: 3px solid #e5ebf5;
+    border-radius: 50%;
+    border-top-color: #1949ad;
+    height: 34px;
+    width: 34px;
+    animation: loadingSpin .8s linear infinite;
+}
+
+.app-loading-card p {
+    color: #314264;
+    font-size: .85rem;
+    font-weight: 750;
+    margin: 18px 0 4px;
+}
+
+.app-loading-card small {
+    color: #8a97aa;
+    font-size: .7rem;
+}
+
+@keyframes loadingSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 /* Animation and transition effects */
 
 button,
@@ -1610,7 +1670,7 @@ select,
 }
 
 /* Page entrance */
-.dashboard > * {
+.dashboard>* {
     animation: fadeUp .35s ease both;
 }
 
@@ -1645,6 +1705,7 @@ select,
 
 /* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {

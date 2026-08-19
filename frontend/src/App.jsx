@@ -222,7 +222,8 @@ function App() {
 
   const loadData = useCallback(async () => {
     const token = localStorage.getItem("stocksplit-token");
-    if (!token || isDemo) return;
+
+    if (!token) return;
     const [
       dashboardData,
       inventoryData,
@@ -250,17 +251,9 @@ function App() {
     setBatches(batchesData.batches || []);
     setExpenses(expensesData.expenses || []);
     setAlerts(alertsData.alerts || []);
-  }, [isDemo]);
+  }, []);
 
-  useEffect(() => {
-    if (screen !== "dashboard" || isDemo) return;
-    loadData().catch((apiError) => {
-      setError(apiError.message);
-      setScreen("login");
-    });
-  }, [screen, isDemo, loadData]);
-
-  const [setInitializing] = useState(true);
+  const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -275,15 +268,12 @@ function App() {
       }
 
       setUser(savedUser);
-      setScreen("dashboard");
 
       try {
         await loadData();
+        setScreen("dashboard");
       } catch (apiError) {
-        localStorage.removeItem("stocksplit-token");
-        localStorage.removeItem("stocksplit-user");
-        setUser(null);
-        setScreen("login");
+        console.error("Session restore failed:", apiError);
         setError(apiError.message);
       } finally {
         setInitializing(false);
@@ -415,6 +405,23 @@ function App() {
           setScreen("dashboard");
         }}
       />
+    );
+  }
+
+  if (initializing) {
+    return (
+      <div className="app-loading">
+        <div className="app-loading-card">
+          <div className="loading-logo">
+            Stock<span>Split</span>
+          </div>
+
+          <div className="loading-spinner" />
+
+          <p>Loading your shop...</p>
+          <small>Getting everything ready</small>
+        </div>
+      </div>
     );
   }
 
