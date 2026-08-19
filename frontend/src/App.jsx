@@ -285,13 +285,19 @@ function App() {
   const login = async (details) => {
     setBusy(true);
     setError("");
+
     try {
       const result = await authApi.login(details);
+
       localStorage.setItem("stocksplit-token", result.token);
       localStorage.setItem("stocksplit-user", JSON.stringify(result.user));
+
       setUser(result.user);
       setIsDemo(false);
       setPage("overview");
+
+      await loadData();
+
       setScreen("dashboard");
     } catch (apiError) {
       setError(apiError.message);
