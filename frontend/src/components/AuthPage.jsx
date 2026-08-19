@@ -35,8 +35,6 @@ export default function AuthPage({
     setForm(isLogin ? initialRegister : { email: "", password: "" });
     onModeChange(isLogin ? "register" : "login");
   };
-  
-
   return (
     <main className="auth-shell">
       <section className="auth-panel">
