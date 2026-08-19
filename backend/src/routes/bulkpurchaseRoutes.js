@@ -6,7 +6,7 @@ const {
   createBulkPurchase,
   getBulkPurchases,
   getBulkPurchaseById,
-} = require("../controllers/bulkPurchaseController");
+} = require("../controllers/bulkpurchaseController");
 
 const router = express.Router();
 
