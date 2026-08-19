@@ -13,6 +13,7 @@ import PurchaseForm from "./forms/PurchaseForm";
 import SaleForm from "./forms/SaleForm";
 import RepackForm from "./forms/RepackForm";
 import ExpenseForm from "./forms/ExpenseForm";
+import initializing from "../App.jsx";
 
 export default function Dashboard({
   user,
@@ -77,6 +78,10 @@ export default function Dashboard({
         return <Overview data={data} alerts={alerts} onNavigate={onNavigate} />;
     }
   };
+
+  if (initializing) {
+    return <div className="app-loading">Loading ReStock...</div>;
+  }
 
   return (
     <main className="app-shell">

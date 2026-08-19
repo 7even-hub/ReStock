@@ -202,7 +202,9 @@ function App() {
   const savedUser = JSON.parse(
     localStorage.getItem("stocksplit-user") || "null",
   );
-  const [screen, setScreen] = useState(savedUser && savedToken ? "dashboard" : "login");
+  const [screen, setScreen] = useState(
+    savedUser && savedToken ? "dashboard" : "login",
+  );
   const [mode, setMode] = useState("login");
   const [user, setUser] = useState(savedUser);
   const [data, setData] = useState(null);
@@ -257,6 +259,39 @@ function App() {
       setScreen("login");
     });
   }, [screen, isDemo, loadData]);
+
+  const [setInitializing] = useState(true);
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      const token = localStorage.getItem("stocksplit-token");
+      const savedUser = JSON.parse(
+        localStorage.getItem("stocksplit-user") || "null",
+      );
+
+      if (!token || !savedUser) {
+        setInitializing(false);
+        return;
+      }
+
+      setUser(savedUser);
+      setScreen("dashboard");
+
+      try {
+        await loadData();
+      } catch (apiError) {
+        localStorage.removeItem("stocksplit-token");
+        localStorage.removeItem("stocksplit-user");
+        setUser(null);
+        setScreen("login");
+        setError(apiError.message);
+      } finally {
+        setInitializing(false);
+      }
+    };
+
+    initializeApp();
+  }, [loadData]);
 
   const login = async (details) => {
     setBusy(true);
