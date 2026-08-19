@@ -198,10 +198,11 @@ const demoSales = {
 };
 
 function App() {
+  const savedToken = localStorage.getItem("stocksplit-token");
   const savedUser = JSON.parse(
     localStorage.getItem("stocksplit-user") || "null",
   );
-  const [screen, setScreen] = useState(savedUser ? "dashboard" : "login");
+  const [screen, setScreen] = useState(savedUser && savedToken ? "dashboard" : "login");
   const [mode, setMode] = useState("login");
   const [user, setUser] = useState(savedUser);
   const [data, setData] = useState(null);
