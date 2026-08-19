@@ -6,17 +6,23 @@ const protect = require("./middleware/authMiddleware");
 
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoute");
-const bulkPurchaseRoutes = require("./routes/bulkPurchaseRoutes");
+const bulkPurchaseRoutes = require("./routes/bulkpurchaseRoutes");
 const repackBatchRoutes = require("./routes/repackBatchRoutes");
 const saleRoutes = require("./routes/saleRoutes");
 const inventoryRoutes = require("./routes/inventoryRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const alertRoutes = require("./routes/alertRoutes");
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://7even-hub.github.io",
+];
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins,
+}));
 app.use(express.json());
 
 app.get("/", (req, res) => {
